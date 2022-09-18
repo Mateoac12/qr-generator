@@ -1,5 +1,5 @@
 ---
-const baseURL = import.meta.env.BASE_URL
+const baseURL = Astro.url
 ---
 
 <head>
@@ -84,15 +84,15 @@ const baseURL = import.meta.env.BASE_URL
 </style>
 
 <script define:vars={{ baseURL }}>
-  console.log({ baseURL })
   const form = document.getElementById('form')
+  const qrContainer = document.getElementById('qr-result')
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault()
 
     const url = new URL(evt.target.url.value)
-
-    fetch(`${baseURL}/api/generate-qr`, {
+    console.log(`${baseURL}/api/generate-qr`)
+    fetch(`${baseURL}api/generate-qr`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,7 +103,6 @@ const baseURL = import.meta.env.BASE_URL
     })
       .then((res) => res.json())
       .then((data) => {
-        const qrContainer = document.getElementById('qrContainer')
         qrContainer.innerHTML = data.url
       })
   })
